@@ -1,5 +1,5 @@
 {
-  "name": "@lifetrack-platform/contracts",
+  "name": "@lifetrack/contracts",
   "version": "0.1.0",
   "description": "Contratos gRPC (.proto) compartidos entre los microservicios de LifeTrack OS",
   "author": "",
@@ -10,7 +10,7 @@
     "proto"
   ],
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "repository": {
     "type": "git",
