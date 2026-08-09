@@ -147,6 +147,7 @@ message AppointmentResponse {
   string type = 6;
   optional bool attended = 7;
   string title = 8;
+  optional string rescheduledFromDate = 9;
 }
 
 message UpdateAppointmentRequest {
