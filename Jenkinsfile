@@ -1,3 +1,7 @@
+// El publish a npm se hace a mano (npm 2FA-bypass tokens dejan de servir para publish en CI, ver
+// https://github.blog/changelog/2026-07-08-npm-install-time-security-and-gat-bypass2fa-deprecation/):
+// `pnpm publish --no-git-checks` desde una terminal local autenticada.
+
 pipeline {
   agent any
 
@@ -10,28 +14,6 @@ pipeline {
       steps {
         sh "npm install -g pnpm@10.21.0"
         sh "pnpm install --frozen-lockfile"
-      }
-    }
-
-    stage("Publish") {
-      steps {
-        withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-          script {
-            sh "npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN}"
-
-            def pkgVersion = sh(script: "node -p \"require('./package.json').version\"", returnStdout: true).trim()
-            def alreadyPublished = sh(
-              script: "npm view @lifetrack/contracts@${pkgVersion} version 2>/dev/null",
-              returnStatus: true
-            ) == 0
-
-            if (alreadyPublished) {
-              echo "contracts@${pkgVersion} ya está publicada, no hay nada que hacer."
-            } else {
-              sh "pnpm publish --no-git-checks"
-            }
-          }
-        }
       }
     }
   }
