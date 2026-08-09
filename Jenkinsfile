@@ -37,11 +37,9 @@ pipeline {
   post {
     success {
       echo "Pipeline OK - contracts #${env.BUILD_NUMBER}"
-      githubNotify credentialsId: 'github-token-userpass', status: 'SUCCESS', context: 'jenkins-ci', description: 'CI passed'
     }
     failure {
       echo "Pipeline FAILED - contracts #${env.BUILD_NUMBER}"
-      githubNotify credentialsId: 'github-token-userpass', status: 'FAILURE', context: 'jenkins-ci', description: 'CI failed'
     }
   }
 }
