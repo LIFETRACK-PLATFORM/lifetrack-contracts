@@ -6,6 +6,7 @@ service RehabService {
   rpc CreateRecoveryPlan (CreateRecoveryPlanRequest) returns (RecoveryPlanResponse);
   rpc ListRecoveryPlansByUser (ListRecoveryPlansByUserRequest) returns (ListRecoveryPlansByUserResponse);
   rpc UpdateRecoveryPlanStatus (UpdateRecoveryPlanStatusRequest) returns (UpdateRecoveryPlanStatusResponse);
+  rpc DeleteRecoveryPlan (DeleteRecoveryPlanRequest) returns (DeleteRecoveryPlanResponse);
   rpc AddExercise (AddExerciseRequest) returns (ExerciseResponse);
   rpc UpdateExercise (UpdateExerciseRequest) returns (ExerciseResponse);
   rpc DeleteExercise (DeleteExerciseRequest) returns (DeleteExerciseResponse);
@@ -66,6 +67,15 @@ message UpdateRecoveryPlanStatusRequest {
 message UpdateRecoveryPlanStatusResponse {
   string recoveryPlanId = 1;
   string status = 2;
+}
+
+message DeleteRecoveryPlanRequest {
+  string recoveryPlanId = 1;
+}
+
+message DeleteRecoveryPlanResponse {
+  string recoveryPlanId = 1;
+  bool deleted = 2;
 }
 
 message AddExerciseRequest {
