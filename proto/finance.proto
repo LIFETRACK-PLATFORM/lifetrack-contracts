@@ -26,6 +26,7 @@ service FinanceService {
   rpc DeleteRecurringItem (DeleteRecurringItemRequest) returns (DeleteRecurringItemResponse);
   rpc ListRecurringItems (ListRecurringItemsRequest) returns (ListRecurringItemsResponse);
   rpc ProcessRecurringItems (ProcessRecurringItemsRequest) returns (ProcessRecurringItemsResponse);
+  rpc DetectRecurringCandidates (DetectRecurringCandidatesRequest) returns (DetectRecurringCandidatesResponse);
 }
 
 message CreateAccountRequest {
@@ -279,4 +280,21 @@ message ProcessRecurringItemsRequest {}
 message ProcessRecurringItemsResponse {
   repeated RecurringItemResponse pendingReminders = 1;
   repeated TransactionResponse generatedTransactions = 2;
+}
+
+message DetectRecurringCandidatesRequest {}
+
+message RecurringCandidateResponse {
+  string accountId = 1;
+  string categoryId = 2;
+  double amount = 3;
+  string kind = 4;
+  int32 dayOfMonth = 5;
+  int32 occurrences = 6;
+  string suggestedName = 7;
+  string lastOccurredAt = 8;
+}
+
+message DetectRecurringCandidatesResponse {
+  repeated RecurringCandidateResponse candidates = 1;
 }
