@@ -146,6 +146,7 @@ message AddAppointmentRequest {
   string type = 5;
   int32 repeatWeeks = 6;
   string title = 7;
+  string location = 8;
 }
 
 message AppointmentResponse {
@@ -158,6 +159,7 @@ message AppointmentResponse {
   optional bool attended = 7;
   string title = 8;
   optional string rescheduledFromDate = 9;
+  string location = 10;
 }
 
 message UpdateAppointmentRequest {
@@ -167,6 +169,7 @@ message UpdateAppointmentRequest {
   string provider = 4;
   string type = 5;
   string notes = 6;
+  string location = 7;
 }
 
 message AddAppointmentResponse {
