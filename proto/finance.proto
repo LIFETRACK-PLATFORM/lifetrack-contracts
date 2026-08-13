@@ -317,6 +317,8 @@ message CreateDebtRequest {
   int32 dueDay = 8;
   string accountId = 9;
   string categoryId = 10;
+  int32 installmentCount = 11;
+  int32 startingInstallment = 12;
 }
 
 message UpdateDebtRequest {
@@ -330,6 +332,8 @@ message UpdateDebtRequest {
   int32 dueDay = 8;
   string accountId = 9;
   string categoryId = 10;
+  int32 installmentCount = 11;
+  int32 startingInstallment = 12;
 }
 
 message DeleteDebtRequest {
@@ -357,6 +361,10 @@ message DebtResponse {
   string status = 13;
   int32 lastPaymentMonth = 14;
   int32 lastPaymentYear = 15;
+  int32 installmentCount = 16;
+  int32 startingInstallment = 17;
+  int32 currentInstallment = 18;
+  double totalInterestPaid = 19;
 }
 
 message ListDebtsRequest {}
@@ -371,6 +379,7 @@ message RegisterDebtPaymentRequest {
   double amount = 3;
   string description = 4;
   string occurredAt = 5;
+  double interestAmount = 6;
 }
 
 message RegisterDebtPaymentResponse {
