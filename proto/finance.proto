@@ -26,6 +26,14 @@ service FinanceService {
   rpc DeleteRecurringItem (DeleteRecurringItemRequest) returns (DeleteRecurringItemResponse);
   rpc ListRecurringItems (ListRecurringItemsRequest) returns (ListRecurringItemsResponse);
   rpc ProcessRecurringItems (ProcessRecurringItemsRequest) returns (ProcessRecurringItemsResponse);
+  rpc DetectRecurringCandidates (DetectRecurringCandidatesRequest) returns (DetectRecurringCandidatesResponse);
+  rpc CreateDebt (CreateDebtRequest) returns (DebtResponse);
+  rpc UpdateDebt (UpdateDebtRequest) returns (DebtResponse);
+  rpc DeleteDebt (DeleteDebtRequest) returns (DeleteDebtResponse);
+  rpc ListDebts (ListDebtsRequest) returns (ListDebtsResponse);
+  rpc RegisterDebtPayment (RegisterDebtPaymentRequest) returns (RegisterDebtPaymentResponse);
+  rpc AdjustDebtBalance (AdjustDebtBalanceRequest) returns (DebtResponse);
+  rpc GetDebtsSummary (GetDebtsSummaryRequest) returns (GetDebtsSummaryResponse);
 }
 
 message CreateAccountRequest {
@@ -279,4 +287,128 @@ message ProcessRecurringItemsRequest {}
 message ProcessRecurringItemsResponse {
   repeated RecurringItemResponse pendingReminders = 1;
   repeated TransactionResponse generatedTransactions = 2;
+}
+
+message DetectRecurringCandidatesRequest {}
+
+message RecurringCandidateResponse {
+  string accountId = 1;
+  string categoryId = 2;
+  double amount = 3;
+  string kind = 4;
+  int32 dayOfMonth = 5;
+  int32 occurrences = 6;
+  string suggestedName = 7;
+  string lastOccurredAt = 8;
+}
+
+message DetectRecurringCandidatesResponse {
+  repeated RecurringCandidateResponse candidates = 1;
+}
+
+message CreateDebtRequest {
+  string name = 1;
+  string lender = 2;
+  string type = 3;
+  string currency = 4;
+  double totalOwed = 5;
+  double originalAmount = 6;
+  double minimumPayment = 7;
+  int32 dueDay = 8;
+  string accountId = 9;
+  string categoryId = 10;
+  int32 installmentCount = 11;
+  int32 startingInstallment = 12;
+}
+
+message UpdateDebtRequest {
+  string debtId = 1;
+  string name = 2;
+  string lender = 3;
+  string type = 4;
+  string currency = 5;
+  double originalAmount = 6;
+  double minimumPayment = 7;
+  int32 dueDay = 8;
+  string accountId = 9;
+  string categoryId = 10;
+  int32 installmentCount = 11;
+  int32 startingInstallment = 12;
+}
+
+message DeleteDebtRequest {
+  string debtId = 1;
+}
+
+message DeleteDebtResponse {
+  bool deleted = 1;
+  bool archived = 2;
+}
+
+message DebtResponse {
+  string debtId = 1;
+  string userId = 2;
+  string name = 3;
+  string lender = 4;
+  string type = 5;
+  string currency = 6;
+  double totalOwed = 7;
+  double originalAmount = 8;
+  double minimumPayment = 9;
+  int32 dueDay = 10;
+  string accountId = 11;
+  string categoryId = 12;
+  string status = 13;
+  int32 lastPaymentMonth = 14;
+  int32 lastPaymentYear = 15;
+  int32 installmentCount = 16;
+  int32 startingInstallment = 17;
+  int32 currentInstallment = 18;
+  double totalInterestPaid = 19;
+}
+
+message ListDebtsRequest {}
+
+message ListDebtsResponse {
+  repeated DebtResponse debts = 1;
+}
+
+message RegisterDebtPaymentRequest {
+  string debtId = 1;
+  string accountId = 2;
+  double amount = 3;
+  string description = 4;
+  string occurredAt = 5;
+  double interestAmount = 6;
+}
+
+message RegisterDebtPaymentResponse {
+  string transactionId = 1;
+  string debtId = 2;
+  double amount = 3;
+  double totalOwedAfter = 4;
+  string statusAfter = 5;
+  double accountBalanceAfter = 6;
+  string occurredAt = 7;
+}
+
+message AdjustDebtBalanceRequest {
+  string debtId = 1;
+  double newTotalOwed = 2;
+}
+
+message GetDebtsSummaryRequest {
+  int32 periodMonth = 1;
+  int32 periodYear = 2;
+}
+
+message DebtCurrencySummary {
+  string currency = 1;
+  double totalOwed = 2;
+  double totalDueThisPeriod = 3;
+  int32 activeCount = 4;
+}
+
+message GetDebtsSummaryResponse {
+  repeated DebtCurrencySummary summaries = 1;
 }
