@@ -18,6 +18,8 @@ service RehabService {
   rpc AddMeasurement (AddMeasurementRequest) returns (MeasurementResponse);
   rpc UpdateMeasurement (UpdateMeasurementRequest) returns (MeasurementResponse);
   rpc DeleteMeasurement (DeleteMeasurementRequest) returns (DeleteMeasurementResponse);
+  rpc UpsertMeasurementDefinition (UpsertMeasurementDefinitionRequest) returns (MeasurementDefinitionResponse);
+  rpc DeleteMeasurementDefinition (DeleteMeasurementDefinitionRequest) returns (DeleteMeasurementDefinitionResponse);
   rpc AddProgressPhoto (AddProgressPhotoRequest) returns (ProgressPhotoResponse);
   rpc ListRecoveryProgress (ListRecoveryProgressRequest) returns (RecoveryProgressResponse);
   rpc MarkExerciseCompletion (MarkExerciseCompletionRequest) returns (MarkExerciseCompletionResponse);
@@ -27,6 +29,8 @@ service RehabService {
   rpc ListPainLogs (ListPainLogsRequest) returns (ListPainLogsResponse);
   rpc SetAdHocProtocolDay (SetAdHocProtocolDayRequest) returns (SetAdHocProtocolDayResponse);
   rpc ClearAdHocProtocolDay (ClearAdHocProtocolDayRequest) returns (ClearAdHocProtocolDayResponse);
+  rpc AssignExerciseToDate (AssignExerciseToDateRequest) returns (ExerciseDateAssignmentResponse);
+  rpc UnassignExerciseFromDate (UnassignExerciseFromDateRequest) returns (UnassignExerciseFromDateResponse);
 }
 
 message CreateRecoveryPlanRequest {
@@ -88,6 +92,7 @@ message AddExerciseRequest {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message ExerciseResponse {
@@ -100,6 +105,7 @@ message ExerciseResponse {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message UpdateExerciseRequest {
@@ -111,6 +117,7 @@ message UpdateExerciseRequest {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message DeleteExerciseRequest {
@@ -146,6 +153,7 @@ message AddAppointmentRequest {
   string type = 5;
   int32 repeatWeeks = 6;
   string title = 7;
+  string location = 8;
 }
 
 message AppointmentResponse {
@@ -158,6 +166,7 @@ message AppointmentResponse {
   optional bool attended = 7;
   string title = 8;
   optional string rescheduledFromDate = 9;
+  string location = 10;
 }
 
 message UpdateAppointmentRequest {
@@ -167,6 +176,7 @@ message UpdateAppointmentRequest {
   string provider = 4;
   string type = 5;
   string notes = 6;
+  string location = 7;
 }
 
 message AddAppointmentResponse {
@@ -201,6 +211,7 @@ message AddMeasurementRequest {
   string unit = 4;
   string date = 5;
   string customLabel = 6;
+  string measurementDefinitionId = 7;
 }
 
 message UpdateMeasurementRequest {
@@ -230,6 +241,38 @@ message MeasurementResponse {
   string unit = 5;
   string date = 6;
   string customLabel = 7;
+  string measurementDefinitionId = 8;
+}
+
+message UpsertMeasurementDefinitionRequest {
+  string recoveryPlanId = 1;
+  string type = 2;
+  string customLabel = 3;
+  string unit = 4;
+  optional double targetValue = 5;
+  optional double minValue = 6;
+  optional double maxValue = 7;
+}
+
+message MeasurementDefinitionResponse {
+  string measurementDefinitionId = 1;
+  string recoveryPlanId = 2;
+  string type = 3;
+  string customLabel = 4;
+  string unit = 5;
+  optional double targetValue = 6;
+  optional double minValue = 7;
+  optional double maxValue = 8;
+}
+
+message DeleteMeasurementDefinitionRequest {
+  string measurementDefinitionId = 1;
+}
+
+message DeleteMeasurementDefinitionResponse {
+  string measurementDefinitionId = 1;
+  string recoveryPlanId = 2;
+  bool deleted = 3;
 }
 
 message AddProgressPhotoRequest {
@@ -273,6 +316,37 @@ message ExerciseProgress {
   string metricType = 10;
   int32 targetDurationMinutes = 11;
   string notes = 12;
+  string category = 13;
+}
+
+message AssignExerciseToDateRequest {
+  string exerciseId = 1;
+  string date = 2;
+  string todayIso = 3;
+}
+
+message UnassignExerciseFromDateRequest {
+  string exerciseId = 1;
+  string date = 2;
+}
+
+message ExerciseDateAssignmentResponse {
+  string exerciseDateAssignmentId = 1;
+  string exerciseId = 2;
+  string recoveryPlanId = 3;
+  string date = 4;
+}
+
+message UnassignExerciseFromDateResponse {
+  string exerciseId = 1;
+  string date = 2;
+  bool deleted = 3;
+}
+
+message ExerciseDateAssignmentEntry {
+  string exerciseDateAssignmentId = 1;
+  string exerciseId = 2;
+  string date = 3;
 }
 
 message PainLogResponse {
@@ -295,6 +369,8 @@ message RecoveryProgressResponse {
   repeated ProgressPhotoResponse progressPhotos = 9;
   repeated PainLogResponse painLogs = 10;
   repeated AdHocProtocolDayEntry adHocProtocolDays = 11;
+  repeated MeasurementDefinitionResponse measurementDefinitions = 12;
+  repeated ExerciseDateAssignmentEntry exerciseDateAssignments = 13;
 }
 
 message MarkExerciseCompletionRequest {
