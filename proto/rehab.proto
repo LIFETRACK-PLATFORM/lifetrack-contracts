@@ -29,6 +29,8 @@ service RehabService {
   rpc ListPainLogs (ListPainLogsRequest) returns (ListPainLogsResponse);
   rpc SetAdHocProtocolDay (SetAdHocProtocolDayRequest) returns (SetAdHocProtocolDayResponse);
   rpc ClearAdHocProtocolDay (ClearAdHocProtocolDayRequest) returns (ClearAdHocProtocolDayResponse);
+  rpc AssignExerciseToDate (AssignExerciseToDateRequest) returns (ExerciseDateAssignmentResponse);
+  rpc UnassignExerciseFromDate (UnassignExerciseFromDateRequest) returns (UnassignExerciseFromDateResponse);
 }
 
 message CreateRecoveryPlanRequest {
@@ -90,6 +92,7 @@ message AddExerciseRequest {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message ExerciseResponse {
@@ -102,6 +105,7 @@ message ExerciseResponse {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message UpdateExerciseRequest {
@@ -113,6 +117,7 @@ message UpdateExerciseRequest {
   string metricType = 8;
   int32 targetDurationMinutes = 9;
   string notes = 10;
+  string category = 11;
 }
 
 message DeleteExerciseRequest {
@@ -311,6 +316,37 @@ message ExerciseProgress {
   string metricType = 10;
   int32 targetDurationMinutes = 11;
   string notes = 12;
+  string category = 13;
+}
+
+message AssignExerciseToDateRequest {
+  string exerciseId = 1;
+  string date = 2;
+  string todayIso = 3;
+}
+
+message UnassignExerciseFromDateRequest {
+  string exerciseId = 1;
+  string date = 2;
+}
+
+message ExerciseDateAssignmentResponse {
+  string exerciseDateAssignmentId = 1;
+  string exerciseId = 2;
+  string recoveryPlanId = 3;
+  string date = 4;
+}
+
+message UnassignExerciseFromDateResponse {
+  string exerciseId = 1;
+  string date = 2;
+  bool deleted = 3;
+}
+
+message ExerciseDateAssignmentEntry {
+  string exerciseDateAssignmentId = 1;
+  string exerciseId = 2;
+  string date = 3;
 }
 
 message PainLogResponse {
@@ -334,6 +370,7 @@ message RecoveryProgressResponse {
   repeated PainLogResponse painLogs = 10;
   repeated AdHocProtocolDayEntry adHocProtocolDays = 11;
   repeated MeasurementDefinitionResponse measurementDefinitions = 12;
+  repeated ExerciseDateAssignmentEntry exerciseDateAssignments = 13;
 }
 
 message MarkExerciseCompletionRequest {
