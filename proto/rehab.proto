@@ -18,6 +18,8 @@ service RehabService {
   rpc AddMeasurement (AddMeasurementRequest) returns (MeasurementResponse);
   rpc UpdateMeasurement (UpdateMeasurementRequest) returns (MeasurementResponse);
   rpc DeleteMeasurement (DeleteMeasurementRequest) returns (DeleteMeasurementResponse);
+  rpc UpsertMeasurementDefinition (UpsertMeasurementDefinitionRequest) returns (MeasurementDefinitionResponse);
+  rpc DeleteMeasurementDefinition (DeleteMeasurementDefinitionRequest) returns (DeleteMeasurementDefinitionResponse);
   rpc AddProgressPhoto (AddProgressPhotoRequest) returns (ProgressPhotoResponse);
   rpc ListRecoveryProgress (ListRecoveryProgressRequest) returns (RecoveryProgressResponse);
   rpc MarkExerciseCompletion (MarkExerciseCompletionRequest) returns (MarkExerciseCompletionResponse);
@@ -204,6 +206,7 @@ message AddMeasurementRequest {
   string unit = 4;
   string date = 5;
   string customLabel = 6;
+  string measurementDefinitionId = 7;
 }
 
 message UpdateMeasurementRequest {
@@ -233,6 +236,38 @@ message MeasurementResponse {
   string unit = 5;
   string date = 6;
   string customLabel = 7;
+  string measurementDefinitionId = 8;
+}
+
+message UpsertMeasurementDefinitionRequest {
+  string recoveryPlanId = 1;
+  string type = 2;
+  string customLabel = 3;
+  string unit = 4;
+  optional double targetValue = 5;
+  optional double minValue = 6;
+  optional double maxValue = 7;
+}
+
+message MeasurementDefinitionResponse {
+  string measurementDefinitionId = 1;
+  string recoveryPlanId = 2;
+  string type = 3;
+  string customLabel = 4;
+  string unit = 5;
+  optional double targetValue = 6;
+  optional double minValue = 7;
+  optional double maxValue = 8;
+}
+
+message DeleteMeasurementDefinitionRequest {
+  string measurementDefinitionId = 1;
+}
+
+message DeleteMeasurementDefinitionResponse {
+  string measurementDefinitionId = 1;
+  string recoveryPlanId = 2;
+  bool deleted = 3;
 }
 
 message AddProgressPhotoRequest {
@@ -298,6 +333,7 @@ message RecoveryProgressResponse {
   repeated ProgressPhotoResponse progressPhotos = 9;
   repeated PainLogResponse painLogs = 10;
   repeated AdHocProtocolDayEntry adHocProtocolDays = 11;
+  repeated MeasurementDefinitionResponse measurementDefinitions = 12;
 }
 
 message MarkExerciseCompletionRequest {

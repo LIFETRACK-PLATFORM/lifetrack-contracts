@@ -1,6 +1,6 @@
 {
   "name": "@lifetrack/contracts",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Contratos gRPC (.proto) compartidos entre los microservicios de LifeTrack OS",
   "author": "",
   "license": "UNLICENSED",
